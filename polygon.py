@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Mon Sep 15 18:40:17 2014
@@ -81,9 +82,9 @@ for point in point_list:
         continue
     
     # count intersections
-    count = 0 # intersections counter
+    count = 0
     final_vertex_passed = False
-    counter = 0 # it is added to i to pass sides that were already considered inside the loop
+    counter = 0
     for i in range(vertex_count):
         if final_vertex_passed:
             break
@@ -92,14 +93,16 @@ for point in point_list:
         j, final_vertex_passed = next_num(i)    
         vertex1 = vertex_list[i]
         vertex2 = vertex_list[j]
+        min_x = min(vertex1[0], vertex2[0])
+        max_x = min(vertex1[0], vertex2[0])
         min_y = min(vertex1[1], vertex2[1])
         max_y = max(vertex1[1], vertex2[1])
         det_value = det(vertex1, vertex2, point)
         if y >= min_y and y <= max_y and det_value <= 0:
             # there may be an intersection
             horizontal = False
-            if det_value == 0 and y == vertex1[1]: 
-                # the point lays on the horizontal line, connecting vertices 1, 2
+            if det_value == 0 and y == vertex1[1] and x >= max_x: 
+                # the point lies on the horizontal line, connecting vertices 1, 2
                 horizontal = True
                 k = prev_num(i)
                 vertex0 = vertex_list[k]
@@ -140,7 +143,7 @@ for point in point_list:
                     end_below = False
                     if vertex3[1] < y:
                         end_below = True
-                # check whether the ray intersects a series of horizontal sides
+                # check whether ray intersects a series of horizontal sides
                 if (begin_below and not end_below) or (not begin_below and end_below):
                     count += 1
                     continue
